@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <graphics.h>
 
 
@@ -52,13 +53,51 @@ void Lineas_Palabras(PosX, PosY, TotalX, Cantidad) {
 
 
 
-int main () {
-    int gdriver=DETECT, gmode;
-    initgraph(&gdriver,&gmode,NULL);
+void Menu_Inicial () {
+    outtextxy(120,80,"Bienvenido al AHORCADO en Modo Grafico con C");
+    outtextxy(20,120,"CREADOR: Leonardo Da Silva");
+    outtextxy(20,140,"CURSO: 4 Computacion");
+    outtextxy(20,160,"FECHA: 2021");
+    delay(4000);
+    cleardevice();
+}
 
-    Poste_Ahorcado(60,20,120);
+
+void Pregunta (char *Palabra, int *Cantidad_de_Letras) {
+    int i;
     
-    Lineas_Palabras(100,350,525,5);
+    outtextxy(20,215,"Ingrese la Palabra del Ahorcado=> ");
+    printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n                                                       ");
+    scanf("%s",Palabra);
+    cleardevice();
+    
+    for(i=0;i<99;i++) {
+//         printf("%c", Palabra[i]);
+        if((Palabra[i])!='~') (*Cantidad_de_Letras)++;
+    }
+    (*Cantidad_de_Letras)--;
+    
+//     printf("\n\n\n\n            Cantidad de letras: %i", *Cantidad_de_Letras);
+    
+}
+    
+int main () {
+    int gdriver=DETECT, gmode, i, Cantidad_de_Letras=0;
+    char Palabra[99];
+    initgraph(&gdriver,&gmode,NULL);
+    
+    
+    for(i=0;i<99;i++) {
+//         Palabra[i]="\t";
+        Palabra[i]='~';
+    }
+    
+    Menu_Inicial();
+    
+    Pregunta(&Palabra,&Cantidad_de_Letras);
+    
+    Poste_Ahorcado(60,20,120);
+    Lineas_Palabras(100,350,getmaxx()-100,Cantidad_de_Letras);
     
     
     
