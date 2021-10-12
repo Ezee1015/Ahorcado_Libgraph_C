@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <graphics.h>
 
+int Contador_Vector_Respuestas=0, Contador_Vector_Respuestas_Correctas=0;
 
 void Poste_Ahorcado (int Fallidos, int PosX, int PosY) {
     
@@ -68,7 +69,7 @@ void Pregunta (char *Palabra, int *Cantidad_de_Letras) {
     fflush(stdin);
     cleardevice();
     
-    for(i=0;i<99;i++) {
+    for(i=0;i<50;i++) {
         if((Palabra[i])!='~') (*Cantidad_de_Letras)++;
     }
     (*Cantidad_de_Letras)--;
@@ -77,7 +78,7 @@ void Pregunta (char *Palabra, int *Cantidad_de_Letras) {
 
 
 void Lee_Letra (char *Letra_Ingresada) {
-    outtextxy(20,395,"Ingrese la Letra a Buscar=>");
+    outtextxy(20,395,"Ingrese la Letra a Apostar=>");
     fflush(stdin);
     scanf("%c", Letra_Ingresada);
     fflush(stdin);
@@ -86,23 +87,35 @@ void Lee_Letra (char *Letra_Ingresada) {
 }
 
 
-void Comprobar_y_Colocar_Letra (char Letra_Ingresada, char *Palabra, int Cantidad_de_Letras, int Largo_Cada_Linea, int Espacio_por_cada_Linea, int *Total_Encontradas, int *Fallos, int PosX_Ahorcado, int PosY_Ahorcado) {
+void Comprobar_Letra (char Letra_Ingresada, char *Palabra, int Cantidad_de_Letras, int Largo_Cada_Linea, int Espacio_por_cada_Linea, int *Total_Encontradas, int *Fallos, int PosX_Ahorcado, int PosY_Ahorcado, char *Respuestas, char *Respuestas_Correctas) {
 
-    int Cant_Letras_Encontradas=0, i, r, z;
+    int Cant_Letras_Encontradas=0, i, Repetido=0;
     
-    for(i=0;i<=Cantidad_de_Letras;i++) {
-    
-            if(Palabra[i]==Letra_Ingresada) {
-                Cant_Letras_Encontradas++;
-                Imprimir_Letras (Palabra, i, Letra_Ingresada, Largo_Cada_Linea, Espacio_por_cada_Linea, PosX_Ahorcado, PosY_Ahorcado);
-            }
-        
+    for(i=0;i<40;i++) {
+        if(Respuestas[i]==Letra_Ingresada) {
+            Repetido=1;
+            
+        }
     }
     
-    if (Cant_Letras_Encontradas==0) (*Fallos)++;
+    if(Repetido!=1){
+        Respuestas[Contador_Vector_Respuestas]=Letra_Ingresada;
+        Contador_Vector_Respuestas++;
+        for(i=0;i<=Cantidad_de_Letras;i++) {
         
-    *Total_Encontradas=(*Total_Encontradas)+Cant_Letras_Encontradas;
-    
+                if(Palabra[i]==Letra_Ingresada) {
+                    Cant_Letras_Encontradas++;
+                    Respuestas_Correctas[Contador_Vector_Respuestas_Correctas]=Letra_Ingresada;
+                    Contador_Vector_Respuestas_Correctas++;
+//                     Imprimir_Letras (Palabra, i, Letra_Ingresada, Largo_Cada_Linea, Espacio_por_cada_Linea, PosX_Ahorcado, PosY_Ahorcado);
+                }
+            
+        }
+        
+        if (Cant_Letras_Encontradas==0) (*Fallos)++;
+            
+        *Total_Encontradas=(*Total_Encontradas)+Cant_Letras_Encontradas;
+    }
 }
 
 
@@ -117,11 +130,22 @@ void Imprimir_Letras (char *Palabra, int Posicion, char Letra_Ingresada, int Lar
 }
 
 
+void Escribe_Letras (char *Respuestas_Correctas, char *Palabra, int Largo_Cada_Linea, int Espacio_por_cada_Linea, int PosX_Ahorcado, int PosY_Ahorcado) {
+    int i,c;
+    for(i=0;i<40;i++){
+        for(c=0;c<50;c++) {
+            if(Respuestas_Correctas[i]==Palabra[c]){
+                Imprimir_Letras(Palabra, c, Palabra[c], Largo_Cada_Linea, Espacio_por_cada_Linea, PosX_Ahorcado,PosY_Ahorcado);
+            }
+        }
+    }
+}
+
 
     
 int main () {
     int gdriver=DETECT, gmode, i, Cantidad_de_Letras=0,Largo_Cada_Linea,Espacio_por_cada_Linea, Total_Encontradas=0, Fallos=0;
-    char Palabra[99999], Respuesta[99999], Letra_Ingresada='~';
+    char Palabra[50], Respuesta[99999], Respuestas[40], Letra_Ingresada='~';
     initgraph(&gdriver,&gmode,NULL);
     
     
@@ -132,15 +156,19 @@ int main () {
     
     Menu_Inicial();
     
-     Pregunta(&Palabra,&Cantidad_de_Letras);
+    Pregunta(&Palabra,&Cantidad_de_Letras);
     
+    char Respuestas_Correctas[Cantidad_de_Letras];
+     
     printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n                                               ");   
       
     while(Fallos<4){
         Poste_Ahorcado(Fallos,20,120);
         Lineas_Palabras(100,350,getmaxx()-100,Cantidad_de_Letras, &Largo_Cada_Linea,&Espacio_por_cada_Linea);
         Lee_Letra(&Letra_Ingresada);
-        Comprobar_y_Colocar_Letra(Letra_Ingresada,&Palabra,Cantidad_de_Letras,Largo_Cada_Linea,Espacio_por_cada_Linea, &Total_Encontradas, &Fallos, 100, 350);
+        Comprobar_Letra(Letra_Ingresada,&Palabra,Cantidad_de_Letras,Largo_Cada_Linea,Espacio_por_cada_Linea, &Total_Encontradas, &Fallos, 100, 350, &Respuestas, &Respuestas_Correctas);
+        cleardevice();
+        Escribe_Letras(&Respuestas_Correctas,&Palabra, Largo_Cada_Linea, Espacio_por_cada_Linea, 100,350);
         if (Total_Encontradas==Cantidad_de_Letras) {
             cleardevice();
             outtextxy(195,65,"FELICIDADES --> Has Ganado");
