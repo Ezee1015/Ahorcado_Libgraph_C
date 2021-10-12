@@ -136,7 +136,7 @@ int main () {
     
     printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n                                               ");   
       
-    while(Fallos<5){
+    while(Fallos<4){
         Poste_Ahorcado(Fallos,20,120);
         Lineas_Palabras(100,350,getmaxx()-100,Cantidad_de_Letras, &Largo_Cada_Linea,&Espacio_por_cada_Linea);
         Lee_Letra(&Letra_Ingresada);
