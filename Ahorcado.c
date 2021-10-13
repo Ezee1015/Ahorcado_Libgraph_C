@@ -80,7 +80,7 @@ void Pregunta (char *Palabra, int *Cantidad_de_Letras) {
 void Lee_Letra (char *Letra_Ingresada) {
     outtextxy(20,395,"Ingrese la Letra a Apostar=>");
     fflush(stdin);
-    scanf("%c", Letra_Ingresada);
+    *Letra_Ingresada=getchar();
     fflush(stdin);
     fflush(stdin);    
     
@@ -172,7 +172,10 @@ int main () {
         if (Total_Encontradas==Cantidad_de_Letras) {
             cleardevice();
             outtextxy(195,65,"FELICIDADES --> Has Ganado");
-            delay(3000);
+            outtextxy(195,115,"RESPUESTA --> ");
+            sprintf(Respuesta,"%s",Palabra);
+            outtextxy(305,115,Respuesta);
+            delay(4000);
             closegraph();
         }
     }
@@ -184,7 +187,7 @@ int main () {
     sprintf(Respuesta,"%s",Palabra);
     outtextxy(305,115,Respuesta);
     
-    delay(3000);
+    delay(4000);
     closegraph();
     
 }
