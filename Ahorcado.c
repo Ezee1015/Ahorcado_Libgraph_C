@@ -142,10 +142,39 @@ void Escribe_Letras (char *Respuestas_Correctas, char *Palabra, int Largo_Cada_L
 }
 
 
+
+void Letras_Escritas (char *Respuestas, char *Respuestas_Correctas) {
+    char Letras[50];
+    char Caracter[5];
+    int i, x, Letras_Contador=0, La_Letra_Esta_Repetida=0;
+    
+    outtextxy(10,50,"Correctas -> ");
+    
+    for(i=0;i<Contador_Vector_Respuestas_Correctas;i++){
+        for(x=0;x<50;x++){ //PARA QUE NO SALGAN LETRAS REPETIDAS
+            if (Letras[x]==Respuestas_Correctas[i]) { //PARA QUE NO SALGAN LETRAS REPETIDAS
+                La_Letra_Esta_Repetida=1;
+            }
+        }
+        
+        if (La_Letra_Esta_Repetida==0) {
+                sprintf(Caracter,"%c | ",Respuestas_Correctas[i]);
+                outtextxy(100+(30*Letras_Contador),50,Caracter);
+                Letras[Letras_Contador]=Respuestas_Correctas[i]; //PARA QUE NO SALGAN LETRAS REPETIDAS
+                Letras_Contador++;
+        }
+            La_Letra_Esta_Repetida=0;    
+    }
+
+}
+
+
+
+
     
 int main () {
     int gdriver=DETECT, gmode, i, Cantidad_de_Letras=0,Largo_Cada_Linea,Espacio_por_cada_Linea, Total_Encontradas=0, Fallos=0;
-    char Palabra[50], Respuesta[99999], Respuestas[40], Letra_Ingresada='~';
+    char Palabra[50], Respuesta[99999], Respuestas[99], Letra_Ingresada='~';
     initgraph(&gdriver,&gmode,NULL);
     
     
@@ -163,6 +192,7 @@ int main () {
     printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n                                               ");   
       
     while(Fallos<4){
+        Letras_Escritas(&Respuestas,&Respuestas_Correctas);
         Poste_Ahorcado(Fallos,20,120);
         Lineas_Palabras(100,350,getmaxx()-100,Cantidad_de_Letras, &Largo_Cada_Linea,&Espacio_por_cada_Linea);
         Lee_Letra(&Letra_Ingresada);
