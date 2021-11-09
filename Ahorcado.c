@@ -51,7 +51,7 @@ void Lineas_Palabras(int PosX, int PosY, int TotalX, int Cantidad, int *Largo_Ca
 
 void Menu_Inicial () {
     outtextxy(120,80,"Bienvenido al AHORCADO en Modo Grafico con C");
-    outtextxy(20,120,"CREADOR: Leonardo Da Silva");
+    outtextxy(20,120,"CREADOR: Ezee1015");
     outtextxy(20,140,"CURSO: 4 Computacion");
     outtextxy(20,160,"FECHA: 2021");
     delay(4000);
