@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <graphics.h>
@@ -143,12 +144,14 @@ void Escribe_Letras (char *Respuestas_Correctas, char *Palabra, int Largo_Cada_L
 
 
 
-void Letras_Escritas (char *Respuestas, char *Respuestas_Correctas) {
-    char Letras[50];
+void Letras_Escritas (char *Respuestas, char *Respuestas_Correctas, int *Fallos) {
+    char Letras[50]={'~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~',};
+    char Letras_Inc[50]={'~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~',};
     char Caracter[5];
-    int i, x, Letras_Contador=0, La_Letra_Esta_Repetida=0;
+    int i, x, Letras_Contador=0, La_Letra_Esta_Repetida=0, Correcta;
     
-    outtextxy(10,50,"Correctas -> ");
+    outtextxy(10,20,"Correctas -> ");
+    outtextxy(10,70,"Incorrectas -> ");
     
     for(i=0;i<Contador_Vector_Respuestas_Correctas;i++){
         for(x=0;x<50;x++){ //PARA QUE NO SALGAN LETRAS REPETIDAS
@@ -159,12 +162,39 @@ void Letras_Escritas (char *Respuestas, char *Respuestas_Correctas) {
         
         if (La_Letra_Esta_Repetida==0) {
                 sprintf(Caracter,"%c | ",Respuestas_Correctas[i]);
-                outtextxy(100+(30*Letras_Contador),50,Caracter);
+                outtextxy(100+(30*Letras_Contador),20,Caracter);
                 Letras[Letras_Contador]=Respuestas_Correctas[i]; //PARA QUE NO SALGAN LETRAS REPETIDAS
                 Letras_Contador++;
         }
             La_Letra_Esta_Repetida=0;    
     }
+    
+    Letras_Contador=0;
+    
+    for(i=0;i<50;i++){
+        if(Respuestas[i]!='~'){
+            La_Letra_Esta_Repetida=0;
+            Correcta=0;
+            for(x=0;x<50;x++){ //PARA QUE NO SALGAN LETRAS REPETIDAS
+                if (Respuestas[i]==Letras_Inc[x]) { //PARA QUE NO SALGAN LETRAS REPETIDAS
+                    La_Letra_Esta_Repetida=1;
+                }
+                
+                if(Respuestas[i]==Respuestas_Correctas[x]) Correcta=1;
+            }
+            
+            if (La_Letra_Esta_Repetida==0 && Correcta==0) {
+                    sprintf(Caracter,"%c | ", Respuestas[i]);
+                    outtextxy(110+(30*Letras_Contador),70,Caracter);
+                    Letras_Inc[Letras_Contador]=Respuestas[i]; //PARA QUE NO SALGAN LETRAS REPETIDAS
+                    Letras_Contador++;
+            }
+                La_Letra_Esta_Repetida=0;    
+        }
+    }
+    
+    
+    
 
 }
 
@@ -188,11 +218,12 @@ int main () {
     Pregunta(&Palabra,&Cantidad_de_Letras);
     
     char Respuestas_Correctas[Cantidad_de_Letras];
+    char Respuestas_Incorrectas[Cantidad_de_Letras];
      
     printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n                                               ");   
       
     while(Fallos<4){
-        Letras_Escritas(&Respuestas,&Respuestas_Correctas);
+        Letras_Escritas(&Respuestas,&Respuestas_Correctas, &Fallos);
         Poste_Ahorcado(Fallos,20,120);
         Lineas_Palabras(100,350,getmaxx()-100,Cantidad_de_Letras, &Largo_Cada_Linea,&Espacio_por_cada_Linea);
         Lee_Letra(&Letra_Ingresada);
